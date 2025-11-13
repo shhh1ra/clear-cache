@@ -67,7 +67,10 @@ int main() {
         current / "Games" / "Steam" / "steamapps" / "temp",
         current / "Games" / "Steam" / "steamapps" / "workshop",
         current / "Games" / "Steam" / "steamapps" / "downloading",
-        current / "Games" / "Steam" / "steamapps" / "common" / "Counter-Strike Global Offensive" / "csgo" / "maps" / "workshop"
+        current / "Games" / "Steam" / "steamapps" / "common" / "Counter-Strike Global Offensive" / "csgo" / "maps" / "workshop",
+        current / "ChromeDownloads",
+        current / "nekoray",
+        current / "discord-fixes",
     };
 
     // Замер времени начала всего процесса
