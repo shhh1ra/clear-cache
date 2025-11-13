@@ -1,0 +1,6 @@
+coliz-clear-cache.exe
+cpp.log
+main.obj
+old_main.cpp
+.idea
+.idea/.gitignore
