@@ -4,14 +4,14 @@
 #include <thread>
 #include <vector>
 #include <mutex>
+#include <chrono>
 
 using namespace std;
 namespace fs = std::filesystem;
 
-// Мьютекс для логов
 mutex logMutex;
 
-// Функция логирования
+// Логирование в файл с защитой mutex
 void log_message(const string& msg) {
     lock_guard<mutex> lock(logMutex);
     ofstream log("cpp.log", ios_base::app);
@@ -20,20 +20,37 @@ void log_message(const string& msg) {
     }
 }
 
-// Функция удаления папки
+// Удаление папки с замером времени
 void remove_folder(const fs::path& p) {
+    auto start_time = chrono::steady_clock::now();
+
     try {
         if (fs::exists(p)) {
             fs::remove_all(p);
-            log_message("Cache folder: " + p.string() + " successfully removed.");
-            cout << "Cache folder: " << p << " successfully removed." << endl;
+            auto end_time = chrono::steady_clock::now();
+            chrono::duration<double> elapsed = end_time - start_time;
+
+            string msg = "Cache folder: " + p.string() + " successfully removed in " +
+                         to_string(elapsed.count()) + " seconds.";
+            log_message(msg);
+            cout << msg << endl;
         } else {
-            log_message("Cache folder: " + p.string() + " not found.");
-            cout << "Cache folder: " << p << " not found." << endl;
+            auto end_time = chrono::steady_clock::now();
+            chrono::duration<double> elapsed = end_time - start_time;
+
+            string msg = "Cache folder: " + p.string() + " not found (checked in " +
+                         to_string(elapsed.count()) + " seconds).";
+            log_message(msg);
+            cout << msg << endl;
         }
     } catch (const exception& e) {
-        log_message("Error removing folder " + p.string() + ": " + e.what());
-        cerr << "Error removing folder " << p << ": " << e.what() << endl;
+        auto end_time = chrono::steady_clock::now();
+        chrono::duration<double> elapsed = end_time - start_time;
+
+        string msg = "Error removing folder " + p.string() + " (" + to_string(elapsed.count()) +
+                     " seconds), error: " + e.what();
+        log_message(msg);
+        cerr << msg << endl;
     }
 }
 
@@ -43,7 +60,6 @@ int main() {
 
     fs::path current = fs::current_path();
 
-    // Папки для удаления
     vector<fs::path> folders = {
         current / "Games" / "Steam" / "steam" / "cached",
         current / "Games" / "Steam" / "userdata",
@@ -54,20 +70,24 @@ int main() {
         current / "Games" / "Steam" / "steamapps" / "common" / "Counter-Strike Global Offensive" / "csgo" / "maps" / "workshop"
     };
 
-    vector<thread> threads;
+    // Замер времени начала всего процесса
+    auto start_total = chrono::steady_clock::now();
 
-    // Запускаем потоки
+    vector<thread> threads;
     for (auto& folder : folders) {
         threads.emplace_back(remove_folder, folder);
     }
 
-    // Ждём завершения всех потоков
     for (auto& t : threads) {
         t.join();
     }
 
-    log_message("All folders processed.");
-    cout << "All folders processed." << endl;
+    auto end_total = chrono::steady_clock::now();
+    chrono::duration<double> total_elapsed = end_total - start_total;
+
+    string total_msg = "All folders processed in " + to_string(total_elapsed.count()) + " seconds.";
+    log_message(total_msg);
+    cout << total_msg << endl;
 
     return 0;
 }
