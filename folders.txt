@@ -26,3 +26,5 @@ D:\WinSCP
 E:\SteamLibrary\steamapps\downloading
 E:\SteamLibrary\steamapps\shadercache
 E:\SteamLibrary\steamapps\temp
+D:\Games\PointBlank
+D:\Games\MAJESTIC_GTA
