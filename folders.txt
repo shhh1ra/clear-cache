@@ -22,3 +22,4 @@ D:\found.010
 D:\AyuGram
 D:\Outplayed
 D:\RAGEMP
+D:\WinSCP
