@@ -18,3 +18,5 @@ D:\found.007
 D:\found.008
 D:\found.009
 D:\found.010
+"D:\Telegram Desktop"
+D:\AyuGram
