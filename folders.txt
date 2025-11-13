@@ -1,20 +1,20 @@
-current / "Games" / "Steam" / "steam" / "cached",
-        current / "Games" / "Steam" / "userdata",
-        current / "Games" / "Steam" / "steamapps" / "shadercache",
-        current / "Games" / "Steam" / "steamapps" / "temp",
-        current / "Games" / "Steam" / "steamapps" / "workshop",
-        current / "Games" / "Steam" / "steamapps" / "downloading",
-        current / "Games" / "Steam" / "steamapps" / "common" / "Counter-Strike Global Offensive" / "csgo" / "maps" / "workshop",
-        current / "ChromeDownloads",
-        current / "nekoray",
-        current / "discord-fixes",
-        current / "found.001",
-        current / "found.002",
-        current / "found.003",
-        current / "found.004",
-        current / "found.005",
-        current / "found.006",
-        current / "found.007",
-        current / "found.008",
-        current / "found.009",
-        current / "found.010",
+D:\Games\Steam\steam\cached
+D:\Games\Steam\userdata
+D:\Games\Steam\steamapps\shadercache
+D:\Games\Steam\steamapps\temp
+D:\Games\Steam\steamapps\workshop
+D:\Games\Steam\steamapps\downloading
+D:\Games\Steam\steamapps\common\Counter-Strike Global Offensive\csgo\maps\workshop
+D:\ChromeDownloads
+D:\nekoray
+D:\discord-fixes
+D:\found.001
+D:\found.002
+D:\found.003
+D:\found.004
+D:\found.005
+D:\found.006
+D:\found.007
+D:\found.008
+D:\found.009
+D:\found.010
