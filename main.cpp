@@ -5,13 +5,13 @@
 #include <vector>
 #include <mutex>
 #include <chrono>
+#include <cstdlib> // для system()
 
 using namespace std;
 namespace fs = std::filesystem;
 
 mutex logMutex;
 
-// Логирование в файл с защитой mutex
 void log_message(const string& msg) {
     lock_guard<mutex> lock(logMutex);
     ofstream log("cpp.log", ios_base::app);
@@ -20,7 +20,6 @@ void log_message(const string& msg) {
     }
 }
 
-// Удаление папки с замером времени
 void remove_folder(const fs::path& p) {
     auto start_time = chrono::steady_clock::now();
 
@@ -54,26 +53,47 @@ void remove_folder(const fs::path& p) {
     }
 }
 
+bool download_file(const string& url, const string& output) {
+    // Используем curl через system, -L для редиректов
+    string command = "curl -L \"" + url + "\" -o \"" + output + "\"";
+    int ret = system(command.c_str());
+    return ret == 0 && fs::exists(output);
+}
+
 int main() {
-    // Чистим старый лог
     fs::remove("cpp.log");
 
-    fs::path current = fs::current_path();
+    const string url = "https://raw.githubusercontent.com/shhh1ra/clear-cache/main/folders.txt";
+    const string localFile = "folders.txt";
 
-    vector<fs::path> folders = {
-        current / "Games" / "Steam" / "steam" / "cached",
-        current / "Games" / "Steam" / "userdata",
-        current / "Games" / "Steam" / "steamapps" / "shadercache",
-        current / "Games" / "Steam" / "steamapps" / "temp",
-        current / "Games" / "Steam" / "steamapps" / "workshop",
-        current / "Games" / "Steam" / "steamapps" / "downloading",
-        current / "Games" / "Steam" / "steamapps" / "common" / "Counter-Strike Global Offensive" / "csgo" / "maps" / "workshop",
-        current / "ChromeDownloads",
-        current / "nekoray",
-        current / "discord-fixes",
-    };
+    cout << "Downloading folders list..." << endl;
+    if (!download_file(url, localFile)) {
+        cerr << "Failed to download folders.txt" << endl;
+        return 1;
+    }
+    cout << "Downloaded folders.txt" << endl;
 
-    // Замер времени начала всего процесса
+    vector<fs::path> folders;
+
+    // Читаем пути из файла
+    ifstream infile(localFile);
+    if (!infile.is_open()) {
+        cerr << "Cannot open " << localFile << endl;
+        return 1;
+    }
+
+    string line;
+    while (getline(infile, line)) {
+        if (!line.empty()) {
+            folders.push_back(line);
+        }
+    }
+
+    if (folders.empty()) {
+        cerr << "folders.txt is empty" << endl;
+        return 1;
+    }
+
     auto start_total = chrono::steady_clock::now();
 
     vector<thread> threads;
@@ -91,6 +111,14 @@ int main() {
     string total_msg = "All folders processed in " + to_string(total_elapsed.count()) + " seconds.";
     log_message(total_msg);
     cout << total_msg << endl;
+
+    // Удаляем скачанный файл
+    try {
+        fs::remove(localFile);
+        cout << "Removed " << localFile << endl;
+    } catch (const exception& e) {
+        cerr << "Failed to remove " << localFile << ": " << e.what() << endl;
+    }
 
     return 0;
 }
