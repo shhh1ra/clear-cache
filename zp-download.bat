@@ -5,3 +5,4 @@ move "D:\zapret-discord-youtube-1.9.0b.zip" "D:\zapret-latest\zapret-discord-you
 cd zapret-latest
 tar -xvf zapret-discord-youtube-1.9.0b.zip
 del "zapret-*.zip"
+exit
